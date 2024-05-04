@@ -1,0 +1,87 @@
+-- مخصص بلاك ليست
+local player = game.Players.localPlayer
+-- اعطاء لاعبين بلاك ليست
+if player.name == "لاعب" or player.name == "اسم لاعب اخر" then
+
+-- اللوج بلاك ليست
+local url = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\55\121\100\55\47\108\111\103\45\103\97\109\101\45\114\111\98\108\111\120\45\55\121\100\55\47\109\97\105\110/log-blacklist" -- اللوج
+loadstring(game:HttpGet(url))()
+
+-- طرد لاعب
+player:Kick("بلاك ليست (سوف يتم عمل ريجوين لك بعد كم ثانيه)")
+
+-- rejoin
+wait(2)
+game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
+
+wait(999) 
+end
+
+
+-- مهم جدا
+workspace.FallenPartsDestroyHeight = -50000
+local placeId = game.PlaceId
+
+-- اللوج ( غير مجبور اذا كنت تريده او لا او مسحه )
+if placeId == 13600599498 or placeId == 11984550654 or placeId == 10598963932 or placeId == 10659321502 or placeId == 13122706381 or placeId == 2965497514 or placeId == 14859854878 or placeId == 14145719997 or placeId == 15078024559 or placeId == 15587973262 or placeId == 8054462345 or placeId == 9544666096 or placeId == 15438487904 or placeId == 2768379856 or placeId == 9240295147 or placeId == 9240353587 or placeId == 3824662112 or placeId == 13003089266 or placeId == 13710713070 or placeId == 15606264830 or placeId == 11699829772 then 
+-- تشغيل سكربت + دخول لاعب
+local url = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\55\121\100\55\47\108\111\103\45\103\97\109\101\45\114\111\98\108\111\120\45\55\121\100\55\47\109\97\105\110/log" -- اللوج
+loadstring(game:HttpGet(url))()
+-- فتح gui مخصص لفتح مابات سكربتات (لم يتم اكماله)
+local url = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\55\121\100\55\47\103\117\108\45\114\111\98\108\111\120\45\103\97\109\101\45\55\121\100\55\47\109\97\105\110/gui-test" -- اللوج
+loadstring(game:HttpGet(url))()
+
+game.StarterGui:SetCore("SendNotification",  {
+ Title = "انتظر تحميل سكربت";
+ Text = "By : VR7 HUB";
+ Icon = "";
+ Duration = 5;
+ Callback = NotificationBindable;
+})
+
+wait(1.5)
+
+game.StarterGui:SetCore("SendNotification",  {
+ Title = "تم تشغيل سكربت";
+ Text = "By : VR7 HUB";
+ Icon = "";
+ Duration = 5;
+ Callback = NotificationBindable;
+})
+
+
+end
+
+-- اضافه العاب بعد كلمه placeId == ID then الجمله ID الماب 
+-- اذا كنت تريد تضيف اكثر من ID نفس ماب اكتب بعد ID اكتب or placeId == ID then يجب ان يكون اخر شي then
+
+
+if placeId == 13600599498 then
+print("test")
+
+
+elseif placeId == 11984550654 then -- الربيع كشته
+local url = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\55\121\100\55\47\83\99\114\105\112\116\45\71\97\109\101\47\109\97\105\110\47/Saudi-Kashtah"
+loadstring(game:HttpGet(url))()
+
+elseif placeId == 10598963932 then -- Cat Piece
+local url = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\55\121\100\55\47\83\99\114\105\112\116\45\71\97\109\101\47\109\97\105\110\47/Cat-Piece"
+loadstring(game:HttpGet(url))()
+
+else
+
+
+
+-- خارج نطاق ID game
+local url = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\55\121\100\55\47\108\111\103\45\103\97\109\101\45\114\111\98\108\111\120\45\55\121\100\55\47\109\97\105\110/log-no-game" -- اللوج ( غير مجبور اذا كنت تريد او لا )
+loadstring(game:HttpGet(url))()
+
+
+game.StarterGui:SetCore("SendNotification",  {
+ Title = "الماب لا يوجد سكربت له";
+ Text = "اذا كنت تريد سكربت ابحث متصفح او يوتيوب";
+ Icon = "";
+ Duration = 5;
+ Callback = NotificationBindable;
+})
+end
