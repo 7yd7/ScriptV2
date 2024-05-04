@@ -55,7 +55,7 @@ local url = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\
 loadstring(game:HttpGet(url))()
 
 
-local url = "https://raw.githubusercontent.com/7yd7/ScriptV2/test/Script%20v2/gui/does%20not%20work%20game.lua" -- اللوج ( غير مجبور اذا كنت تريد او لا )
+local url = "https://raw.githubusercontent.com/7yd7/ScriptV2/test/Script%20v2/gui/does%20not%20work%20game.lua"
 loadstring(game:HttpGet(url))()
 
 
