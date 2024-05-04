@@ -22,12 +22,6 @@ local Tabs = {
 local Options = Fluent.Options
 
 do
-    Fluent:Notify({
-        Title = "Notification",
-        Content = "This is a notification",
-        SubContent = "SubContent",
-        Duration = 5 
-    })
 
 
 -- سكربت جميع مابات
