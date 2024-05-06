@@ -4,7 +4,6 @@ local Workspace = game:GetService("Workspace")
 local storedFolder = Workspace:FindFirstChild("Stored")
 
 if storedFolder then
-    print("ملف Stored موجود.")
 else
 -- انشاء ملف مخزن
 local part = Instance.new("Folder")
@@ -73,7 +72,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "7yd7  Hub",
-    SubTitle = "a dusty trip v0.0.1",
+    SubTitle = "a dusty trip v0.0.2",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -92,12 +91,6 @@ local Tabs = {
 local Options = Fluent.Options
 
 do
-    Fluent:Notify({
-        Title = "Notification",
-        Content = "This is a notification",
-        SubContent = "SubContent",
-        Duration = 5 
-    })
 
 
 -- سكربت الماب
@@ -194,50 +187,48 @@ Tabs.gamenew:AddButton({
                 {
                     Title = "Yes",
                     Callback = function()
-                    -- سكربت يتم تفعيله :
-                    local Players = game:GetService("Players")
-                    local Workspace = game:GetService("Workspace")
-                    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-      -- تحديد اللاعب الشخصي
-      local localPlayer = Players.LocalPlayer
-      local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
-      local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-      
-      -- جمع الأسماء من ReplicatedStorage.Liquids
-      local targetNames = {}
-      for _, item in ipairs(ReplicatedStorage.Liquids:GetChildren()) do
-          if item:IsA("Instance") then
-              table.insert(targetNames, item.Name)
-          end
-      end
-      
-      -- دالة تقوم بالبحث داخل النموذج للأجزاء باسم معين
-      local function searchForParts(model)
-          if not model:IsDescendantOf(game.Workspace.Stored.Items) then
-              for _, part in ipairs(model:GetChildren()) do
-                  if part:IsA("MeshPart") then
-                      -- التحقق مما إذا كان اسم النموذج موجود في قائمة الأسماء
-                      for _, name in ipairs(targetNames) do
-                          if model.Name == name then
-                              -- تحديد الموقع الجديد
-                              local newPosition = humanoidRootPart.CFrame.Position + (humanoidRootPart.CFrame.LookVector * 5)
-                              -- تحريك الـ MeshPart إلى الموقع الجديد
-                              part.CFrame = CFrame.new(newPosition)
-                          end
-                      end
-                  end
-                  -- البحث عن الأجزاء داخل النموذج
-                  searchForParts(part)
-              end
-          end
-      end
-      
-      -- البحث عن النماذج وتحريك الأجزاء
-      for _, model in ipairs(Workspace:GetChildren()) do
-          if model:IsA("Model") then
-              searchForParts(model)
-          end
-      end
+                        -- سكربت يتم تفعيله :
+                        local Players = game:GetService("Players")
+                        local Workspace = game:GetService("Workspace")
+                        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                        -- تحديد اللاعب الشخصي
+                        local localPlayer = Players.LocalPlayer
+                        local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+                        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+                        
+                        -- جمع الأسماء من ReplicatedStorage.Liquids
+                        local targetNames = {}
+                        for _, item in ipairs(ReplicatedStorage.Liquids:GetChildren()) do
+                            if item:IsA("Instance") then
+                                table.insert(targetNames, item.Name)
+                            end
+                        end
+                        
+                        -- دالة تقوم بالبحث داخل النموذج للأجزاء باسم معين
+                        local function searchForParts(model)
+                            if not model:IsDescendantOf(game.Workspace.Stored.Items) then
+                                for _, part in ipairs(model:GetDescendants()) do
+                                    if part:IsA("MeshPart") then
+                                        -- التحقق مما إذا كان اسم النموذج موجود في قائمة الأسماء
+                                        for _, name in ipairs(targetNames) do
+                                            if model.Name == name then
+                                                -- تحديد الموقع الجديد
+                                                local newPosition = humanoidRootPart.CFrame.Position + (humanoidRootPart.CFrame.LookVector * 5)
+                                                -- تحريك الـ MeshPart إلى الموقع الجديد
+                                                part.CFrame = CFrame.new(newPosition)
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        
+                        -- البحث عن النماذج وتحريك الأجزاء
+                        for _, model in ipairs(Workspace:GetDescendants()) do
+                            if model:IsA("Model") then
+                                searchForParts(model)
+                            end
+                        end
                     end
                 },
                 {
@@ -249,6 +240,7 @@ Tabs.gamenew:AddButton({
         })
     end
 })
+
 -- اخذ محرك
 Tabs.gamenew:AddButton({
     Title = "Bring radiator + Engine",
@@ -603,9 +595,7 @@ local function transferItem(itemName)
         end
         -- نقل العنصر إلى Workspace بعد تحديث موقعه
         item.Parent = Workspace
-        print("Transferred item:", itemName)
     else
-        print("Item not found:", itemName)
     end
 end
 
@@ -714,54 +704,148 @@ end
         end
     })
 
+
+
     local Toggle = Tabs.gamenew:AddToggle("MyToggle", {Title = "Auto Teleport is the highest site Journey", Default = false })
 
-    -- إنشاء حدث مؤقت
-    local autoJourneyEvent = Instance.new("BindableEvent")
-    
     Toggle:OnChanged(function()
+
         getgenv().AutoJourney = Options.MyToggle.Value
-        -- إشعار الحدث مؤقتًا بالتغيير في قيمة التبديل
-        autoJourneyEvent:Fire(getgenv().AutoJourney)
     end)
-    
+
     Options.MyToggle:SetValue(false)
-    
-    -- استماع لحدث التلقي الذي يتم تشغيله عند تغيير قيمة التبديل
-    autoJourneyEvent.Event:Connect(function(autoJourney)
-        while autoJourney do
-            local Workspace = game:GetService("Workspace")
-            local Players = game:GetService("Players")
-            
-            local roadsFolder = Workspace.models.roads
-            local highestNumber = 0
-            local highestRoadPosition = Vector3.new()
-            
-            -- تحديد أعلى رقم وموقعه
-            for _, road in ipairs(roadsFolder:GetChildren()) do
-                local roadNumber = tonumber(road.Name)
-                if roadNumber and roadNumber > highestNumber then
-                    highestNumber = roadNumber
-                    highestRoadPosition = road.Position
+
+    coroutine.wrap(function()
+	if getgenv().AutoJourney == true  then		
+        local Players = game:GetService("Players")
+
+        local roadsFolder = Workspace.models.roads
+        local highestNumber = 0
+        local highestRoadPosition = Vector3.new()
+        
+        -- تحديد أعلى رقم وموقعه
+        for _, road in ipairs(roadsFolder:GetChildren()) do
+            local roadNumber = tonumber(road.Name)
+            if roadNumber and roadNumber > highestNumber then
+                highestNumber = roadNumber
+                highestRoadPosition = road.Position
+            end
+        end
+        
+        -- إضافة ارتفاع لتجنب أي تعارض محتمل مع الأشياء في الطريق
+        highestRoadPosition = highestRoadPosition + Vector3.new(0, 5, 0)
+        
+        
+        -- الحصول على اللاعب الشخصي
+        local player = Players.LocalPlayer
+        if player then
+            -- نقل موقع اللاعب إلى موقع الطريق
+            player.Character:SetPrimaryPartCFrame(CFrame.new(highestRoadPosition))
+        end
+    end
+end)
+
+Tabs.gamenew:AddSection("weapon")
+
+local Workspace = game:GetService("Workspace")
+
+local namesToCheck = {"AK47", "RPG", "PumpShotgun", "Mac10", "GOLDAK47"} -- الأسماء التي تريد التحقق من وجودها في ملفات Workspace
+
+local foundNames = {} -- جدول لتخزين الأسماء التي تم العثور عليها
+
+-- استكشاف الملفات في Workspace
+local allFiles = Workspace:GetDescendants()
+for _, file in ipairs(allFiles) do
+    -- التحقق مما إذا كان اسم الملف موجودًا في القائمة المحددة ولم يتم العثور عليه بالفعل
+    for _, name in ipairs(namesToCheck) do
+        if file.Name == name and not foundNames[name] then
+            foundNames[name] = true -- قم بتعيين القيمة إلى true للإشارة إلى أن الاسم تم العثور عليه
+        end
+    end
+end
+
+-- تحويل قيم الجدول من بوليانية إلى نص
+local dropdownValues = {}
+for name, _ in pairs(foundNames) do
+    table.insert(dropdownValues, name)
+end
+
+local selectedValue -- قم بتحديد متغير لتخزين القيمة المحددة في الـ Dropdown
+
+local Dropdown = Tabs.gamenew:AddDropdown("Dropdown", {
+    Title = "Dropdown",
+    Values = dropdownValues, -- استخدام الأسماء التي تم التحقق منها
+    Multi = false,
+    Default = 1,
+})
+
+Dropdown:SetValue(dropdownValues[1]) -- تعيين قيمة افتراضية لأول اسم تم العثور عليه
+
+Dropdown:OnChanged(function(Value)
+    -- قم بتحديث قيمة المتغير المحددة
+    selectedValue = Value
+end)
+
+Tabs.gamenew:AddButton({
+    Title = "kill NPC",
+    Description = "",
+    Callback = function()
+        -- استخدم الملف المحدد في السكربت هنا
+        if selectedValue then
+            -- تنفيذ البحث الثانوي
+            local selectedInstance = nil
+            local allFiles = game.Workspace:GetDescendants()
+            for _, file in ipairs(allFiles) do
+                if file.Name == selectedValue and not selectedInstance then
+                    -- استخدام الملف الأول الذي تم العثور عليه
+                    selectedInstance = file
+                elseif file.Name == selectedValue then
                 end
             end
-            
-            -- إضافة ارتفاع لتجنب أي تعارض محتمل مع الأشياء في الطريق
-            highestRoadPosition = highestRoadPosition + Vector3.new(0, 5, 0)
-            
-            
-            -- الحصول على اللاعب الشخصي
-            local player = Players.LocalPlayer
-            if player then
-                -- نقل موقع اللاعب إلى موقع الطريق
-                player.Character:SetPrimaryPartCFrame(CFrame.new(highestRoadPosition))
+            -- تنفيذ السكربت الخاص بك هنا باستخدام الملف المحدد
+            if selectedInstance then
+                local objectNames = {"mutant", "Bandit"}
+
+                -- Function to check if an object name matches the search criteria
+                local function isObjectNameMatching(objectName)
+                  for _, name in ipairs(objectNames) do
+                    if name == objectName then
+                      return true
+                    end
+                  end
+                  return false
+                end
+
+                -- Function to repeatedly attack the object until its health reaches zero
+                local function attackObjectRepeatedly(instance)
+                    while instance and instance:FindFirstChild("Humanoid") and instance.Humanoid.Health > 0 do
+                        instance.Humanoid.Health = 0
+                        local ohInstance1 = selectedInstance
+                        local ohInstance2 = instance
+                        game:GetService("ReplicatedStorage").Network.GunFramework_RequestDamage:FireServer(ohInstance1, ohInstance2)
+                        wait(0.3)  -- تنتظر لثانية قبل إعادة الهجوم
+                    end
+                end
+
+                for _, object in ipairs(game.Workspace:GetDescendants()) do
+                    -- Check if object name matches the search criteria
+                    if isObjectNameMatching(object.Name) then
+                        -- Check if object's humanoid health is greater than zero
+                        if object:FindFirstChild("Humanoid") and object.Humanoid.Health > 0 then
+                            -- Start attacking the object repeatedly
+                            attackObjectRepeatedly(object)
+                        end
+                    end
+                end
+            else
             end
-            
-            wait(3) -- انتظر لبضعة ثواني قبل البدء في التحقق مرة أخرى
+        else
         end
-    end)
-    
-    
+    end
+})
+
+
+
     
     Tabs.gamenew:AddSection("automatic")
 
