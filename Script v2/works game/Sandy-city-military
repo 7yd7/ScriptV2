@@ -1,0 +1,32 @@
+-- getgenv().TeamName = ""
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Teams = game:GetService("Teams")
+
+-- التحقق مما إذا كان متغير الاختبار موجود في أسماء الفرق
+local teamExists = false
+for _, team in ipairs(Teams:GetChildren()) do
+    if team.Name == getgenv().TeamName then
+        teamExists = true
+        break
+    end
+end
+
+-- طباعة نتيجة التحقق
+if teamExists then
+    Fluent:Notify({
+        Title = "by : 7yd7 Hub",
+        Content = "تم اعطاء فريق",
+        Duration = 8
+    })
+
+local ohString1 = getgenv().TeamName
+
+game:GetService("ReplicatedStorage").Team:FireServer(ohString1)
+else
+    Fluent:Notify({
+        Title = "by : 7yd7 Hub",
+        Content =  'لا يوجد بل فريق/تم كتبه الغلط\n او لم يتم كتابه قيمه\ngetgenv().TeamName = ""\n (بدايه سكربت)',
+        Duration = 8
+    })
+end
