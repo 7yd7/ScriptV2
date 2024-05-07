@@ -72,7 +72,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "7yd7  Hub",
-    SubTitle = "a dusty trip v0.0.2",
+    SubTitle = "a dusty trip v0.0.4",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
@@ -93,7 +93,15 @@ local Options = Fluent.Options
 do
 
 
+
 -- سكربت الماب
+
+-- تنبيه شي مهم جدا
+
+Tabs.gamenew:AddParagraph({
+    Title = "[WARNING!]",
+    Content = "The script does not appear to other users/players if you are with someone, but if you play Solo, the script works fine."
+})
 
 
 Tabs.gamenew:AddSection("Stuff")
@@ -138,7 +146,7 @@ local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
                                 if model.Name == name then
                                     -- البحث عن الـ MeshPart داخل النموذج
                                     for _, part in ipairs(model:GetChildren()) do
-                                        if part:IsA("MeshPart") then
+                                        if part:IsA("MeshPart") or part:IsA("Part") then
                                             -- تحديد الموقع الجديد
                                             local newPosition = humanoidRootPart.CFrame.Position + (humanoidRootPart.CFrame.LookVector * 5)
                                             -- تحريك الـ MeshPart إلى الموقع الجديد
@@ -208,7 +216,7 @@ Tabs.gamenew:AddButton({
                         local function searchForParts(model)
                             if not model:IsDescendantOf(game.Workspace.Stored.Items) then
                                 for _, part in ipairs(model:GetDescendants()) do
-                                    if part:IsA("MeshPart") then
+                                    if part:IsA("MeshPart") or part:IsA("Part") then
                                         -- التحقق مما إذا كان اسم النموذج موجود في قائمة الأسماء
                                         for _, name in ipairs(targetNames) do
                                             if model.Name == name then
@@ -277,7 +285,7 @@ Tabs.gamenew:AddButton({
                         if model.Name == name then
                             -- البحث عن الـ MeshPart داخل النموذج
                             for _, part in ipairs(model:GetChildren()) do
-                                if part:IsA("MeshPart") then
+                                if part:IsA("MeshPart") or part:IsA("Part") then
                                     -- تحديد الموقع الجديد
                                     local newPosition = humanoidRootPart.CFrame.Position + (humanoidRootPart.CFrame.LookVector * 5)
                                     -- تحريك الـ MeshPart إلى الموقع الجديد
@@ -355,7 +363,7 @@ Tabs.gamenew:AddButton({
                         if model.Name == name then
                             -- البحث عن الـ MeshPart داخل النموذج
                             for _, part in ipairs(model:GetChildren()) do
-                                if part:IsA("MeshPart") then
+                                if part:IsA("MeshPart") or part:IsA("Part") then
                                     -- تحديد الموقع الجديد
                                     local newPosition = humanoidRootPart.CFrame.Position + (humanoidRootPart.CFrame.LookVector * 5)
                                     -- تحريك الـ MeshPart إلى الموقع الجديد
@@ -392,6 +400,81 @@ Tabs.gamenew:AddButton({
     end
 })
 
+-- اخذ جميع اسلحه
+Tabs.gamenew:AddButton({
+    Title = "Bring Weapon",
+    Description = "",
+    Callback = function()
+        Window:Dialog({
+            Title = "Bring Weapon",
+            Content = "You want it to come Weapon purpose",
+            Buttons = {
+                {
+                    Title = "Yes",
+                    Callback = function()
+                        local Players = game:GetService("Players")
+                        local Workspace = game:GetService("Workspace")
+                        
+                        -- تحديد اللاعب الشخصي
+                        local localPlayer = Players.LocalPlayer
+                        local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+                        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+                        
+                        -- قائمة أسماء الأنماط التي تريد تحريكها
+                        local targetNames = {
+                            "AK47",
+                            "RPG",
+                            "PumpShotgun",
+                            "Mac10",
+                            "Pistol",
+                        }
+                        
+                        -- دالة للبحث في النماذج داخل Workspace
+                        local function searchForModels(model)
+                            -- التحقق مما إذا كانت النموذج داخل game.Workspace.Stored.Items
+                            if not model:IsDescendantOf(game.Workspace.Stored.Items) then
+                                for _, name in ipairs(targetNames) do
+                                    if model.Name == name then
+                                        -- البحث عن الـ MeshPart داخل النموذج
+                                        for _, part in ipairs(model:GetChildren()) do
+                                            if part:IsA("MeshPart") or part:IsA("Part") then
+                                                -- تحديد الموقع الجديد
+                                                local newPosition = humanoidRootPart.CFrame.Position + (humanoidRootPart.CFrame.LookVector * 5)
+                                                -- تحريك الـ MeshPart إلى الموقع الجديد
+                                                part.CFrame = CFrame.new(newPosition)
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        
+                            -- البحث عن النماذج الفرعية
+                            for _, child in ipairs(model:GetChildren()) do
+                                if child:IsA("Model") then
+                                    searchForModels(child)
+                                end
+                            end
+                        end
+                        
+                        -- البحث عن النماذج وتحريك الأجزاء
+                        local models = Workspace:GetDescendants()
+                        for _, model in ipairs(models) do
+                            if model:IsA("Model") then
+                                searchForModels(model)
+                            end
+                        end
+                    end                        
+                },
+                {
+                    Title = "No",
+                    Callback = function()
+                    end
+                }
+            }
+        })
+    end
+})
+
 -- اخذ الكوين
 Tabs.gamenew:AddButton({
     Title = "Bring BottleCap",
@@ -404,54 +487,57 @@ Tabs.gamenew:AddButton({
                 {
                     Title = "Yes",
                     Callback = function()
-            -- سكربت لذي يتم تفعيله :
-            local Players = game:GetService("Players")
-            local Workspace = game:GetService("Workspace")
-            local ReplicatedStorage = game:GetService("ReplicatedStorage")
-            
-            -- تحديد اللاعب الشخصي
-            local localPlayer = Players.LocalPlayer
-            local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
-            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-            
-            -- قائمة أسماء الأنماط التي تريد تحريكها
-            local targetNames = {
-                "BottleCap",
-            }
-            
-            -- دالة للبحث في النماذج داخل Workspace
-            local function searchForModels(model)
-                -- التحقق مما إذا كانت النموذج داخل game.Workspace.Stored.Items
-                if not model:IsDescendantOf(game.Workspace.Stored.Items) then
-                    for _, name in ipairs(targetNames) do
-                        if model.Name == name then
-                            -- البحث عن الـ MeshPart داخل النموذج
-                            for _, part in ipairs(model:GetChildren()) do
-                                if part:IsA("MeshPart") then
-                                    -- تحديد الموقع الجديد
-                                    local newPosition = humanoidRootPart.CFrame.Position + (humanoidRootPart.CFrame.LookVector * 5)
-                                    -- تحريك الـ MeshPart إلى الموقع الجديد
-                                    part.CFrame = CFrame.new(newPosition)
+                        local Players = game:GetService("Players")
+                        local Workspace = game:GetService("Workspace")
+                        
+                        -- تحديد اللاعب الشخصي
+                        local localPlayer = Players.LocalPlayer
+                        local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+                        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+                        
+                        -- قائمة أسماء الأنماط التي تريد تحريكها
+                        local targetNames = {
+                            "BottleCap",
+                            "10pile",
+                            "20pile",
+                            "5pile",
+                            "15pile",
+                        }
+                        
+                        -- دالة للبحث في النماذج داخل Workspace
+                        local function searchForModels(model)
+                            -- التحقق مما إذا كانت النموذج داخل game.Workspace.Stored.Items
+                            if not model:IsDescendantOf(game.Workspace.Stored.Items) then
+                                for _, name in ipairs(targetNames) do
+                                    if model.Name == name then
+                                        -- البحث عن الـ MeshPart داخل النموذج
+                                        for _, part in ipairs(model:GetChildren()) do
+                                            if part:IsA("MeshPart") or part:IsA("Part") then
+                                                -- تحديد الموقع الجديد
+                                                local newPosition = humanoidRootPart.CFrame.Position + (humanoidRootPart.CFrame.LookVector * 5)
+                                                -- تحريك الـ MeshPart إلى الموقع الجديد
+                                                part.CFrame = CFrame.new(newPosition)
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        
+                            -- البحث عن النماذج الفرعية
+                            for _, child in ipairs(model:GetChildren()) do
+                                if child:IsA("Model") then
+                                    searchForModels(child)
                                 end
                             end
                         end
-                    end
-                end
-                -- البحث عن النماذج الفرعية
-                for _, child in ipairs(model:GetChildren()) do
-                    if child:IsA("Model") then
-                        searchForModels(child)
-                    end
-                end
-            end
-      
-      -- البحث عن النماذج وتحريك الأجزاء
-            local models = Workspace:GetDescendants()
-            for _, model in ipairs(models) do
-                if model:IsA("Model") then
-                    searchForModels(model)
-                end
-            end
+                        
+                        -- البحث عن النماذج وتحريك الأجزاء
+                        local models = Workspace:GetDescendants()
+                        for _, model in ipairs(models) do
+                            if model:IsA("Model") then
+                                searchForModels(model)
+                            end
+                        end                
     end
                 },
                 {
@@ -500,31 +586,30 @@ UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         if tool:IsDescendantOf(game.Players.LocalPlayer.Character) then
             -- الحصول على الكائن الذي تم النقر عليه
-            local targetItem = mouse.Target
-            if targetItem and targetItem:IsA("MeshPart") then
-                -- الحصول على parentName للكائن
-                local parentName = targetItem.Parent
+-- الحصول على الكائن الذي تم النقر عليه
+local targetItem = mouse.Target
+    -- الحصول على parentName للكائن
+    local parentName = targetItem.Parent
 
-                -- التحقق من وجود parentName في ReplicatedStorage.Liquids
-                local liquidsFolder = ReplicatedStorage.Liquids
-                local liquidObjectInLiquids = liquidsFolder and liquidsFolder:FindFirstChild(parentName.Name)
+    -- التحقق من وجود parentName في ReplicatedStorage.Liquids
+    local liquidsFolder = ReplicatedStorage.Liquids
+    local liquidObjectInLiquids = liquidsFolder and liquidsFolder:FindFirstChild(parentName.Name)
 
-                -- التحقق من وجود parentName في ReplicatedStorage.Items
-                local itemsFolder = ReplicatedStorage.items
-                local liquidObjectInItems = itemsFolder and itemsFolder:FindFirstChild(parentName.Name)
+    -- التحقق من وجود parentName في ReplicatedStorage.Items
+    local itemsFolder = ReplicatedStorage.items
+    local liquidObjectInItems = itemsFolder and itemsFolder:FindFirstChild(parentName.Name)
 
-                -- النقل فقط إذا تم العثور على مطابقة في أحد المجلدين
-                if liquidObjectInLiquids or liquidObjectInItems then
-                    -- نقل parentName إلى workspace.Stored.Items
-                    parentName.Parent = Workspace.Stored.Items
-                -- البحث عن MeshPart داخل الكائن الوالد وتحديث CFrame لكل واحدة منها
-                for _, child in ipairs(parentName:GetDescendants()) do
-                    if child:IsA("MeshPart") then
-                        child.CFrame = CFrame.new(79.0788498, 134.300034, 8725.1416)
-                    end
-                end
+    -- النقل فقط إذا تم العثور على مطابقة في أحد المجلدين
+    if liquidObjectInLiquids or liquidObjectInItems then
+        -- نقل parentName إلى workspace.Stored.Items
+        parentName.Parent = Workspace.Stored.Items
+        -- البحث عن MeshPart داخل الكائن الوالد وتحديث CFrame لكل واحدة منها
+        for _, child in ipairs(parentName:GetDescendants()) do
+            if child:IsA("MeshPart") or child:IsA("Part") then
+                child.CFrame = CFrame.new(79.0788498, 134.300034, 8725.1416)
             end
         end
+    end
     end
 end
 end)
@@ -582,7 +667,7 @@ local function transferItem(itemName)
     if item then
         local meshParts = item:GetDescendants()
         for _, meshPart in ipairs(meshParts) do
-            if meshPart:IsA("MeshPart") then
+            if meshPart:IsA("MeshPart") or meshPart:IsA("Part") then
                 -- الحصول على موقع الشخصية وتحريك العنصر إليها
                 local character = Player.Character
                 local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
@@ -749,7 +834,7 @@ Tabs.gamenew:AddSection("weapon")
 
 local Workspace = game:GetService("Workspace")
 
-local namesToCheck = {"AK47", "RPG", "PumpShotgun", "Mac10", "GOLDAK47"} -- الأسماء التي تريد التحقق من وجودها في ملفات Workspace
+local namesToCheck = {"AK47", "RPG", "PumpShotgun", "Mac10", "Pistol", "GOLDAK47"} -- الأسماء التي تريد التحقق من وجودها في ملفات Workspace
 
 local foundNames = {} -- جدول لتخزين الأسماء التي تم العثور عليها
 
@@ -773,7 +858,7 @@ end
 local selectedValue -- قم بتحديد متغير لتخزين القيمة المحددة في الـ Dropdown
 
 local Dropdown = Tabs.gamenew:AddDropdown("Dropdown", {
-    Title = "Dropdown",
+    Title = "Select a weapon",
     Values = dropdownValues, -- استخدام الأسماء التي تم التحقق منها
     Multi = false,
     Default = 1,
@@ -804,7 +889,7 @@ Tabs.gamenew:AddButton({
             end
             -- تنفيذ السكربت الخاص بك هنا باستخدام الملف المحدد
             if selectedInstance then
-                local objectNames = {"mutant", "Bandit"}
+                local objectNames = {"mutant", "Bandit", "Vampire"}
 
                 -- Function to check if an object name matches the search criteria
                 local function isObjectNameMatching(objectName)
